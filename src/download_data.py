@@ -5,6 +5,7 @@ from tqdm import tqdm
 from time import sleep
 current_directory = os.getcwd()
 
+
 def url_formation_for_pool(format_to_download="mmCIF", list_of_file_names=(),
                            default_input_path_to_mmCIF=current_directory + "/mmCIF",
                            default_input_path_to_PDB=current_directory + "/PDB",
@@ -40,6 +41,7 @@ def url_formation_for_pool(format_to_download="mmCIF", list_of_file_names=(),
             os.makedirs(input_path)
 
     return urls_to_target_files
+
 
 def download_file(url, file_path, retries=2):
     """Downloading function with requests"""
