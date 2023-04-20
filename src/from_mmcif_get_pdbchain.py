@@ -57,30 +57,4 @@ def process_chain(active_zerodisorder_name):
     unmodify_pdb(pdb_file, pdbunmod_file)
     os.remove(pdb_file)
 
-    
-def process_chain(active_zerodisorder_name):
-    # Directory containing IO files
-    input_dir = './structures/mmcif_files_selection'
-    output_dir = './structures/PDB_files_selection'
-    parser = CustomMMCIFParser(QUIET=True)
-    pdb_io = PDBIO()
-
-    pdbid = active_zerodisorder_name.split("_")[4][:4].lower()
-    chainid = active_zerodisorder_name.split("_")[4][4:]
-
-    if len(chainid) > 1:
-        return
-
-    cif_gz_file = os.path.join(input_dir, f'{pdbid}.cif.gz')
-
-    with gzip.open(cif_gz_file, 'rt') as cif_gz:
-        structure = parser.get_structure(pdbid, cif_gz)
-
-    pdb_file = os.path.join(output_dir, f'{active_zerodisorder_name}.pdb')
-    pdbunmod_file = os.path.join(output_dir, f'{active_zerodisorder_name}_unmod.pdb')
-    
-    pdb_io.set_structure(structure)
-    pdb_io.save(pdb_file, ChainSelect(chainid))
-    unmodify_pdb(pdb_file, pdbunmod_file)
-    keep_one_occupancy(pdbunmod_file)
 
