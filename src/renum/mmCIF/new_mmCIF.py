@@ -77,7 +77,6 @@ def copy_file(inpath, file_name, outpath, postfix, gzip_mode):
 
 
 def if_no_SIFTS_data_log(mmCIF_name, mmcif_dict, log_message):
-    strand_id_set = set()
     try:
         pull_chains_for_chains_count = mmcif_dict["_pdbx_poly_seq_scheme.pdb_strand_id"]
     except KeyError:
@@ -86,16 +85,12 @@ def if_no_SIFTS_data_log(mmCIF_name, mmcif_dict, log_message):
         except KeyError:
             pull_chains_for_chains_count = mmcif_dict["_atom_site.auth_asym_id"]
 
-    for strand in pull_chains_for_chains_count:
-        strand_id_set.add(strand)
-    strand_id_set = list(strand_id_set)
-    strand_id_set.sort()
+    strand_id_set = sorted(set(pull_chains_for_chains_count))
+
     for strand in strand_id_set:
-        count_elements_in_strand = 0
-        for chain_id in pull_chains_for_chains_count:
-            if chain_id == strand:
-                count_elements_in_strand += 1
+        count_elements_in_strand = sum(1 for chain_id in pull_chains_for_chains_count if chain_id == strand)
         log_message.append([mmCIF_name[:4], strand, "-", "-", "-", "-", count_elements_in_strand, "0", "0"])
+
     return log_message
 
 
